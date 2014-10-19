@@ -76,6 +76,7 @@ class Main extends PluginBase implements Listener{
 		$cmd = strtolower($event->getMessage());
 		$cmd_trim = preg_split("/[\s,]+/", $cmd);
 		$cmd_name = $cmd_trim[0];
+		$cmd_slash = preg_split('//', $cmd_name[0], -1, PREG_SPLIT_NO_EMPTY);
 		
         $player = strtolower($event->getPlayer()->getName());
         $getTick = $this->getServer()->getTick();
@@ -107,26 +108,30 @@ class Main extends PluginBase implements Listener{
 		}
 		
 		if (!($event->getPlayer()->isOp())){
+
+					if("/help" == $cmd_name){
 		
-			if(in_array(strtolower($cmd), $this->cfg["Commands List"])){
-		
-				if(isset($this->temp[$player])){
-				
-					$playerTick = $this->temp[$player];
-					
-					$this->temp[$player] = $getTick;
-					
-					if($getTick - $playerTick < 20 * $secs){
-					
-						$event->getPlayer()->sendMessage("You can use this CMD again next " . $time_dig . $var_name);
-						$event->setCancelled();
+						if(isset($this->temp[$player])){
+						
+							$playerTick = $this->temp[$player];
+							
+							$this->temp[$player] = $getTick;
+							
+							if($getTick - $playerTick < 20 * $secs){
+							
+								$event->getPlayer()->sendMessage("You can use this CMD again next " . $time_dig . $var_name);
+								$event->setCancelled();
+								
+							}
+							
+						}else{
+							$this->temp[$player] = $getTick;
+						}
 						
 					}
-					
-				}else{
-					$this->temp[$player] = $getTick;
-				}
-			}
+				
+				
+			
 		}
     }   
     
