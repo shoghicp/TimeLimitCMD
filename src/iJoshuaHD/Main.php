@@ -47,8 +47,22 @@ class Main extends PluginBase implements Listener{
 					}else{
 						if(!isset($args[0])){
 							$sender->sendMessage(TextFormat::GREEN . "[TLCMD] Usage: /tlcmd <add / remove> <command>");
+						}elseif(($args[0] !== "add") or ($args[0] !== "remove")){
+							$sender->sendMessage(TextFormat::GREEN . "[TLCMD] Usage: /tlcmd <add / remove> <command>");
 						}else{
-							//todo
+							if($args[0] == "add"){
+								if(!isset($args[1])){
+									$sender->sendMessage(TextFormat::GREEN . "[TLCMD] Usage: /tlcmd add <command>");
+								}else{
+									//todo
+								}
+							}elseif($args[0] !== "remove"){
+								if(!isset($args[1])){
+									$sender->sendMessage(TextFormat::GREEN . "[TLCMD] Usage: /tlcmd remove <command>");
+								}else{
+									//todo
+								}
+							}
 						}
 					}
 					
@@ -94,7 +108,7 @@ class Main extends PluginBase implements Listener{
 		
 		if (!($event->getPlayer()->isOp())){
 		
-			if($cmd_name == "/help"){
+			if(in_array(strtolower($cmd), "/" . $this->cfg["Commands List"])){
 		
 				if(isset($this->temp[$player])){
 				
