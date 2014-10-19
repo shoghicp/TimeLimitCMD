@@ -108,7 +108,7 @@ class Main extends PluginBase implements Listener{
 		
 		if (!($event->getPlayer()->isOp())){
 		
-			if(in_array(strtolower($cmd), "/" . $this->cfg["Commands List"])){
+			if(in_array(strtolower($cmd), $this->cfg["Commands List"])){
 		
 				if(isset($this->temp[$player])){
 				
