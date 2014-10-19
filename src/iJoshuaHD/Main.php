@@ -30,6 +30,7 @@ class Main extends PluginBase implements Listener{
 		$this->reloadConfig();
 		
 		$this->cfg = new Config($this->getDataFolder(). "config.yml", Config::YAML);
+		$this->cmd = new Config($this->getDataFolder(). "cmd.txt", Config::ENUM);
 	
 		$this->getLogger()->info(TextFormat::AQUA ."Everything is Loaded!");
 
@@ -46,22 +47,40 @@ class Main extends PluginBase implements Listener{
 						$sender->sendMessage("You dont have permission to use this command.");
 					}else{
 						if(!isset($args[0])){
-							$sender->sendMessage(TextFormat::GREEN . "[TLCMD] Usage: /tlcmd <add / remove> <command>");
+							$sender->sendMessage("[TLCMD] Usage: /tlcmd <add / remove> <command>");
 						}else{
 							if(($args[0] !== "add") and ($args[0] !== "remove")){
-								$sender->sendMessage(TextFormat::GREEN . "[TLCMD] Usage: /tlcmd <add / remove> <command>");
+								$sender->sendMessage("[TLCMD] Usage: /tlcmd <add / remove> <command>");
 							}else{
 								if($args[0] == "add"){
 									if(!isset($args[1])){
-										$sender->sendMessage(TextFormat::GREEN . "[TLCMD] Usage: /tlcmd add <command>");
+										$sender->sendMessage("[TLCMD] Usage: /tlcmd add <command>");
 									}else{
-										//todo
+										$text = strtolower($args[1]);
+										$text_dir = $this->getDataFolder(). "cmd.txt";
+										$array = explode("\n", file_get_contents($text_dir));
+										if(strpos(file_get_contents($text_dir),$text) !== false) {
+											$sender->sendMessage("[TLCMD] \"/" . $text . "\" CMD is already blacklisted.");
+										}else{
+											$array = implode("\n", $text);
+											file_put_contents($text_dir, $array);
+											$sender->sendMessage("[TLCMD] \"/" . $text . "\" CMD blacklisted.");
+										}
 									}
 								}elseif($args[0] == "remove"){
 									if(!isset($args[1])){
-										$sender->sendMessage(TextFormat::GREEN . "[TLCMD] Usage: /tlcmd remove <command>");
+										$sender->sendMessage("[TLCMD] Usage: /tlcmd remove <command>");
 									}else{
-										//todo
+										$text = strtolower($args[1]);
+										$text_dir = $this->getDataFolder(). "cmd.txt";
+										$array = explode("\n", file_get_contents($text_dir));
+										if(!in_array($text, $array)){
+											$sender->sendMessage("[TLCMD] \"/" . $text . "\" CMD is not blacklisted.");
+										}else{
+											array_splice($array, array_search($text, $array));
+											file_put_contents($text_dir, $array);
+											$sender->sendMessage("[TLCMD] \"/" . $text . "\" CMD is now white-listed.");
+										}
 									}
 								}
 							}
@@ -78,6 +97,7 @@ class Main extends PluginBase implements Listener{
 		$cmd = strtolower($event->getMessage());
 		$cmd_trim = preg_split("/[\s,]+/", $cmd);
 		$cmd_name = $cmd_trim[0];
+		$cmd_name_trim = preg_replace('/[^A-Za-z0-9\-]/', '', $cmd_name);
 		$cmd_slash = preg_split('//', $cmd_name[0], -1, PREG_SPLIT_NO_EMPTY);
 		
         $player = strtolower($event->getPlayer()->getName());
@@ -110,8 +130,10 @@ class Main extends PluginBase implements Listener{
 		}
 		
 		if (!($event->getPlayer()->isOp())){
+		
+			$text_dir = $this->getDataFolder(). "cmd.txt";
 
-					if("/help" == $cmd_name){
+					if($cmd_slash[0] == "/" and strpos(file_get_contents($text_dir),$cmd_name_trim) !== false){
 		
 						if(isset($this->temp[$player])){
 						
@@ -131,9 +153,7 @@ class Main extends PluginBase implements Listener{
 						}
 						
 					}
-				
-				
-			
+
 		}
     }   
     
