@@ -1,0 +1,16 @@
+name: TimeLimitCMD
+main: iJoshuaHD\Main
+version: 0.0.1
+api: [1.6.0]
+load: STARTUP
+author: iJoshuaHD
+description: Limit Command Execution Interval
+website: https://github.com/ijoshuahd/TimeLimitCMD
+commands:
+ tlcmd:
+  description: "Time Limit CMD Manager"
+  permissions: tl.command.cmd
+permissions:
+ tl.command.cmd:
+  description: "Time Limit CMD Manager"
+  default: op
