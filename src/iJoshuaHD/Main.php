@@ -47,20 +47,22 @@ class Main extends PluginBase implements Listener{
 					}else{
 						if(!isset($args[0])){
 							$sender->sendMessage(TextFormat::GREEN . "[TLCMD] Usage: /tlcmd <add / remove> <command>");
-						}elseif(($args[0] !== "add") or ($args[0] !== "remove")){
-							$sender->sendMessage(TextFormat::GREEN . "[TLCMD] Usage: /tlcmd <add / remove> <command>");
 						}else{
-							if($args[0] == "add"){
-								if(!isset($args[1])){
-									$sender->sendMessage(TextFormat::GREEN . "[TLCMD] Usage: /tlcmd add <command>");
-								}else{
-									//todo
-								}
-							}elseif($args[0] !== "remove"){
-								if(!isset($args[1])){
-									$sender->sendMessage(TextFormat::GREEN . "[TLCMD] Usage: /tlcmd remove <command>");
-								}else{
-									//todo
+							if(($args[0] !== "add") and ($args[0] !== "remove")){
+								$sender->sendMessage(TextFormat::GREEN . "[TLCMD] Usage: /tlcmd <add / remove> <command>");
+							}else{
+								if($args[0] == "add"){
+									if(!isset($args[1])){
+										$sender->sendMessage(TextFormat::GREEN . "[TLCMD] Usage: /tlcmd add <command>");
+									}else{
+										//todo
+									}
+								}elseif($args[0] == "remove"){
+									if(!isset($args[1])){
+										$sender->sendMessage(TextFormat::GREEN . "[TLCMD] Usage: /tlcmd remove <command>");
+									}else{
+										//todo
+									}
 								}
 							}
 						}
