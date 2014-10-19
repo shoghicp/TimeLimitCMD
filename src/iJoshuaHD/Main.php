@@ -62,7 +62,7 @@ class Main extends PluginBase implements Listener{
 										if(strpos(file_get_contents($text_dir),$text) !== false) {
 											$sender->sendMessage("[TLCMD] \"/" . $text . "\" CMD is already blacklisted.");
 										}else{
-											$array = implode("\n", $text);
+											$array[] .= implode("\r", (array)$text);
 											file_put_contents($text_dir, $array);
 											$sender->sendMessage("[TLCMD] \"/" . $text . "\" CMD blacklisted.");
 										}
