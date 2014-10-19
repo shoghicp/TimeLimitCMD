@@ -11,6 +11,12 @@ commands:
   description: "Time Limit CMD Manager"
   permissions: tl.command.cmd
 permissions:
- tl.command.cmd:
-  description: "Time Limit CMD Manager"
-  default: op
+ tl:
+   description: "Parent permission for TimeLimitCMD"
+   children:
+    tl.command:
+     description: "Allows using TimeLimitCMD commands"
+     children:
+      tl.command.cmd:
+       description: "Allow using /tlcmd"
+       default: op
