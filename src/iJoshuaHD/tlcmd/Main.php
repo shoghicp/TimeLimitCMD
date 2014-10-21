@@ -24,9 +24,9 @@ class Main extends PluginBase implements Listener{
         
 		$this->getServer()->getPluginManager()->registerEvents($this, $this);
 		$this->getLogger()->info(TextFormat::YELLOW . "TimeLimitCMD Initializing [...]");
-		$this->createCMD();
 		$this->saveDefaultConfig();
 		$this->reloadConfig();
+		$this->createCMD();
 		
 		$this->cfg = new Config($this->getDataFolder(). "config.yml", Config::YAML);
 		$this->cmd = $this->getDataFolder(). "cmd.txt";
