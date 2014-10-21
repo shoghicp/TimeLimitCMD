@@ -58,12 +58,10 @@ class Main extends PluginBase implements Listener{
 									}else{
 										$text = strtolower($args[1]);
 										$text_dir = $this->getDataFolder(). "cmd.txt";
-										$array = explode("\n", file_get_contents($text_dir));
 										if(strpos(file_get_contents($text_dir),$text) !== false) {
 											$sender->sendMessage("[TLCMD] \"/" . $text . "\" CMD is already blacklisted.");
 										}else{
-											$array[] .= implode("\r", (array)$text);
-											file_put_contents($text_dir, $array);
+											file_put_contents($text_dir, $text . PHP_EOL, FILE_APPEND);
 											$sender->sendMessage("[TLCMD] \"/" . $text . "\" CMD blacklisted.");
 										}
 									}
@@ -71,16 +69,38 @@ class Main extends PluginBase implements Listener{
 									if(!isset($args[1])){
 										$sender->sendMessage("[TLCMD] Usage: /tlcmd remove <command>");
 									}else{
+									
 										$text = strtolower($args[1]);
 										$text_dir = $this->getDataFolder(). "cmd.txt";
-										$array = explode("\n", file_get_contents($text_dir));
-										if(!in_array($text, $array)){
-											$sender->sendMessage("[TLCMD] \"/" . $text . "\" CMD is not blacklisted.");
+									
+										if(strpos(file_get_contents($text_dir),$text) !== false) {
+
+											$DELETE = $text;
+
+											 $data = file($text_dir);
+
+											 $out = array();
+
+											 foreach($data as $line){
+												 if(trim($line) != $DELETE) {
+													 $out[] = $line;
+												 }
+											 }
+
+											 $fp = fopen($text_dir, "w+");
+											 flock($fp, LOCK_EX);
+											 foreach($out as $line) {
+												 fwrite($fp, $line);
+											 }
+											 flock($fp, LOCK_UN);
+											 fclose($fp);
+											 
+											 $sender->sendMessage("[TLCMD] \"/" . $text . "\" CMD is now white-listed.");
+											 
 										}else{
-											array_splice($array, array_search($text, $array));
-											file_put_contents($text_dir, $array);
-											$sender->sendMessage("[TLCMD] \"/" . $text . "\" CMD is now white-listed.");
+											$sender->sendMessage("[TLCMD] \"/" . $text . "\" CMD is not blacklisted.");
 										}
+
 									}
 								}
 							}
@@ -135,11 +155,11 @@ class Main extends PluginBase implements Listener{
 
 					if($cmd_slash[0] == "/" and strpos(file_get_contents($text_dir),$cmd_name_trim) !== false){
 		
-						if(isset($this->temp[$player])){
+						if(isset($this->temp[$player][$cmd_name_trim])){
 						
-							$playerTick = $this->temp[$player];
+							$playerTick = $this->temp[$player][$cmd_name_trim];
 							
-							$this->temp[$player] = $getTick;
+							$this->temp[$player][$cmd_name_trim] = $getTick;
 							
 							if($getTick - $playerTick < 20 * $secs){
 							
@@ -149,7 +169,7 @@ class Main extends PluginBase implements Listener{
 							}
 							
 						}else{
-							$this->temp[$player] = $getTick;
+							$this->temp[$player][$cmd_name_trim] = $getTick;
 						}
 						
 					}
