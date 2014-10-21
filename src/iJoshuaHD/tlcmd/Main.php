@@ -24,7 +24,7 @@ class Main extends PluginBase implements Listener{
         
 		$this->getServer()->getPluginManager()->registerEvents($this, $this);
 		$this->getLogger()->info(TextFormat::YELLOW . "TimeLimitCMD Initializing [...]");
-		
+		$this->createCMD();
 		$this->saveDefaultConfig();
 		$this->reloadConfig();
 		
@@ -34,6 +34,15 @@ class Main extends PluginBase implements Listener{
 
 			
     }
+	
+	public function createCMD(){
+		
+		$fileLocation = $this->getDataFolder() . "cmd.txt";
+		if(!file_exists($fileLocation)){
+			fopen($fileLocation,"w");
+		}
+
+	}
     
     public function onCommand(CommandSender $sender, Command $command, $label, array $args) {
 	
@@ -56,7 +65,7 @@ class Main extends PluginBase implements Listener{
 									}else{
 										$text = strtolower($args[1]);
 										$text_dir = $this->cmd;
-										if(strpos(file_get_contents($text_dir),$text) !== false) {
+										if(strpos(file_get_contents($text_dir), $text) !== false) {
 											$sender->sendMessage("[TLCMD] \"/" . $text . "\" CMD is already blacklisted.");
 										}else{
 											file_put_contents($text_dir, $text . PHP_EOL, FILE_APPEND);
