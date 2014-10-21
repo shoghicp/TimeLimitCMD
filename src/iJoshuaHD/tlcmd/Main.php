@@ -23,15 +23,13 @@ class Main extends PluginBase implements Listener{
     public function onEnable(){
         
 		$this->getServer()->getPluginManager()->registerEvents($this, $this);
-		
 		$this->getLogger()->info(TextFormat::YELLOW . "TimeLimitCMD Initializing [...]");
 		
 		$this->saveDefaultConfig();
 		$this->reloadConfig();
 		
 		$this->cfg = new Config($this->getDataFolder(). "config.yml", Config::YAML);
-		$this->cmd = new Config($this->getDataFolder(). "cmd.txt", Config::ENUM);
-	
+		$this->cmd = $this->getDataFolder(). "cmd.txt";
 		$this->getLogger()->info(TextFormat::AQUA ."Everything is Loaded!");
 
 			
@@ -57,7 +55,7 @@ class Main extends PluginBase implements Listener{
 										$sender->sendMessage("[TLCMD] Usage: /tlcmd add <command>");
 									}else{
 										$text = strtolower($args[1]);
-										$text_dir = $this->getDataFolder(). "cmd.txt";
+										$text_dir = $this->cmd;
 										if(strpos(file_get_contents($text_dir),$text) !== false) {
 											$sender->sendMessage("[TLCMD] \"/" . $text . "\" CMD is already blacklisted.");
 										}else{
@@ -71,22 +69,18 @@ class Main extends PluginBase implements Listener{
 									}else{
 									
 										$text = strtolower($args[1]);
-										$text_dir = $this->getDataFolder(). "cmd.txt";
+										$text_dir = $this->cmd;
 									
 										if(strpos(file_get_contents($text_dir),$text) !== false) {
-
+										
 											$DELETE = $text;
-
 											 $data = file($text_dir);
-
 											 $out = array();
-
 											 foreach($data as $line){
 												 if(trim($line) != $DELETE) {
 													 $out[] = $line;
 												 }
 											 }
-
 											 $fp = fopen($text_dir, "w+");
 											 flock($fp, LOCK_EX);
 											 foreach($out as $line) {
@@ -94,7 +88,6 @@ class Main extends PluginBase implements Listener{
 											 }
 											 flock($fp, LOCK_UN);
 											 fclose($fp);
-											 
 											 $sender->sendMessage("[TLCMD] \"/" . $text . "\" CMD is now white-listed.");
 											 
 										}else{
@@ -151,7 +144,7 @@ class Main extends PluginBase implements Listener{
 		
 		if (!($event->getPlayer()->isOp())){
 		
-			$text_dir = $this->getDataFolder(). "cmd.txt";
+			$text_dir = $this->cmd;
 
 					if($cmd_slash[0] == "/" and strpos(file_get_contents($text_dir),$cmd_name_trim) !== false){
 		
