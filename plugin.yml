@@ -1,5 +1,5 @@
 name: TimeLimitCMD
-main: iJoshuaHD\Main
+main: iJoshuaHD\tlcmd\Main
 version: 0.0.1
 api: [1.6.0]
 load: STARTUP

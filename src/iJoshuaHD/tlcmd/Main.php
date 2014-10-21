@@ -1,5 +1,5 @@
 <?php
-namespace iJoshuaHD;
+namespace iJoshuaHD\tlcmd;
 
 use pocketmine\event\Listener;
 
